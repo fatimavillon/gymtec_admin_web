@@ -1,0 +1,55 @@
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ─── Node / Next.js ──────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.npm/
+*.tsbuildinfo
+
+# ─── Env files (nunca subir secrets) ─────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ─── Data pesada (copiar localmente desde gymtec_mvp_basico) ─────────────────
+admin_backend/data/raw/*.xlsx
+admin_backend/data/raw/*.csv
+admin_backend/data/interim/*.parquet
+admin_backend/data/interim/*.csv
+
+# Descomenta si no quieres subir los procesados (son derivados)
+# admin_backend/data/processed/*.parquet
+# admin_backend/data/processed/*.csv
+
+# Modelos binarios pesados
+admin_backend/models_artifacts/*.pkl
+
+# Sí subir las métricas JSON (son livianas y útiles para la demo)
+!admin_backend/models_artifacts/*.json
+
+# ─── IDEs / OS ───────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ─── Miscelánea ──────────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+mnt/
+logs/
+*.log
