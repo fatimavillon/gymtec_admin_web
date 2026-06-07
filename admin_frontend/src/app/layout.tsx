@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
 import { AdminShell } from "@/components/layout/AdminShell";
 
 export const metadata: Metadata = {
     title: "GYMTEC Admin — Panel Administrativo",
-    description: "Monitoreo de aforo, predicción y recomendaciones operativas del gimnasio UTEC",
+    description: "Monitoreo de aforo, modelos ML y operación del gimnasio UTEC",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="es">
         <body>

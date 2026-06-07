@@ -10,7 +10,7 @@ const config: Config = {
         extend: {
             colors: {
                 gymtec: {
-                    blue: "#1E40AF",
+                    blue: "#1D4ED8",
                     cyan: "#06B6D4",
                     dark: "#0F172A",
                     card: "#1E293B",
@@ -19,12 +19,9 @@ const config: Config = {
                     low: "#10B981",
                     medium: "#F59E0B",
                     high: "#EF4444",
+                    critical: "#DC2626",
                     closed: "#6B7280",
                 },
-            },
-            fontFamily: {
-                sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-                mono: ["var(--font-geist-mono)", "monospace"],
             },
         },
     },

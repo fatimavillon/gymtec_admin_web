@@ -1,4 +1,6 @@
-export function LoadingState({ label = "Cargando datos..." }: { label?: string }) {
+interface LoadingStateProps { label?: string }
+
+export function LoadingState({ label = "Cargando datos..." }: LoadingStateProps) {
     return (
         <div className="flex flex-col items-center justify-center py-16 gap-4">
             <div className="relative w-10 h-10">

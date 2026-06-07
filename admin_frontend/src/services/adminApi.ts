@@ -1,42 +1,104 @@
-import {
+import { apiGet, ApiError } from "@/services/api";
+import type {
+    ApiResult,
+    HealthResponse,
     DashboardSummary,
-    DataStatus,
     HourlyOccupancyResponse,
-    ModelMetricsResponse,
-    RecommendationResponse,
     WeeklyHeatmapResponse,
+    RecommendationResponse,
+    ModelMetricsResponse,
+    DataStatus,
+    DataSourcesResponse,
+    AdminMetricsResponse,
 } from "@/types/admin";
+import {
+    MOCK_HEALTH,
+    MOCK_DASHBOARD,
+    MOCK_HOURLY,
+    MOCK_HEATMAP,
+    MOCK_RECOMMENDATIONS,
+    MOCK_MODELS,
+    MOCK_DATA_STATUS,
+    MOCK_DATA_SOURCES,
+    MOCK_ADMIN_METRICS,
+} from "@/data/mockAdminData";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8001";
-
-async function apiGet<T>(path: string): Promise<T> {
-    const response = await fetch(`${API_URL}${path}`, {
-        cache: "no-store",
-    });
-
-    if (!response.ok) {
-        throw new Error(`Error al consumir ${path}`);
+async function withFallback<T>(
+    fetcher: () => Promise<T>,
+    fallback: T
+): Promise<ApiResult<T>> {
+    try {
+        const data = await fetcher();
+        return { data, source: "live" };
+    } catch (err) {
+        const message = err instanceof ApiError ? err.message : "Unknown error";
+        return { data: fallback, source: "mock", error: message };
     }
-
-    return response.json();
 }
 
-export const adminApi = {
-    getDashboardSummary: () =>
-        apiGet<DashboardSummary>("/api/dashboard/summary"),
+export async function checkHealth(): Promise<ApiResult<HealthResponse>> {
+    return withFallback(() => apiGet<HealthResponse>("/health"), MOCK_HEALTH);
+}
 
-    getHourlyOccupancy: () =>
-        apiGet<HourlyOccupancyResponse>("/api/occupancy/hourly"),
+export async function getDashboardSummary(): Promise<ApiResult<DashboardSummary>> {
+    return withFallback(
+        () => apiGet<DashboardSummary>("/api/dashboard/summary"),
+        MOCK_DASHBOARD
+    );
+}
 
-    getWeeklyHeatmap: () =>
-        apiGet<WeeklyHeatmapResponse>("/api/occupancy/weekly-heatmap"),
+export async function getHourlyOccupancy(): Promise<ApiResult<HourlyOccupancyResponse>> {
+    return withFallback(
+        () => apiGet<HourlyOccupancyResponse>("/api/occupancy/hourly"),
+        MOCK_HOURLY
+    );
+}
 
-    getRecommendations: () =>
-        apiGet<RecommendationResponse>("/api/recommendations/top-slots"),
+export async function getWeeklyHeatmap(): Promise<ApiResult<WeeklyHeatmapResponse>> {
+    return withFallback(
+        () => apiGet<WeeklyHeatmapResponse>("/api/occupancy/weekly-heatmap"),
+        MOCK_HEATMAP
+    );
+}
 
-    getModelMetrics: () =>
-        apiGet<ModelMetricsResponse>("/api/models/metrics"),
+export async function getRealHeatmap(): Promise<ApiResult<WeeklyHeatmapResponse>> {
+    return withFallback(
+        () => apiGet<WeeklyHeatmapResponse>("/api/occupancy/heatmap-real"),
+        MOCK_HEATMAP
+    );
+}
 
-    getDataStatus: () =>
-        apiGet<DataStatus>("/api/data/status"),
-};
+export async function getTopRecommendations(): Promise<ApiResult<RecommendationResponse>> {
+    return withFallback(
+        () => apiGet<RecommendationResponse>("/api/recommendations/top-slots"),
+        MOCK_RECOMMENDATIONS
+    );
+}
+
+export async function getModelMetrics(): Promise<ApiResult<ModelMetricsResponse>> {
+    return withFallback(
+        () => apiGet<ModelMetricsResponse>("/api/models/metrics"),
+        MOCK_MODELS
+    );
+}
+
+export async function getDataStatus(): Promise<ApiResult<DataStatus>> {
+    return withFallback(
+        () => apiGet<DataStatus>("/api/data/status"),
+        MOCK_DATA_STATUS
+    );
+}
+
+export async function getDataSources(): Promise<ApiResult<DataSourcesResponse>> {
+    return withFallback(
+        () => apiGet<DataSourcesResponse>("/api/data/sources"),
+        MOCK_DATA_SOURCES
+    );
+}
+
+export async function getAdminMetrics(): Promise<ApiResult<AdminMetricsResponse>> {
+    return withFallback(
+        () => apiGet<AdminMetricsResponse>("/api/admin/metrics"),
+        MOCK_ADMIN_METRICS
+    );
+}

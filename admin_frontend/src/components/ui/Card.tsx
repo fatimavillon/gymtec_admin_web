@@ -1,7 +1,8 @@
+import type { ReactNode } from "react";
 import clsx from "clsx";
 
 interface CardProps {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
 }
 
@@ -22,11 +23,11 @@ export function CardHeader({
                                children,
                                className,
                            }: {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
 }) {
     return (
-        <div className={clsx("mb-4 flex items-center justify-between", className)}>
+        <div className={clsx("mb-4 flex items-center justify-between gap-3", className)}>
             {children}
         </div>
     );
@@ -36,11 +37,16 @@ export function CardTitle({
                               children,
                               className,
                           }: {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
 }) {
     return (
-        <h3 className={clsx("text-sm font-semibold text-slate-300 uppercase tracking-wider", className)}>
+        <h3
+            className={clsx(
+                "text-sm font-semibold uppercase tracking-wider text-slate-300",
+                className
+            )}
+        >
             {children}
         </h3>
     );

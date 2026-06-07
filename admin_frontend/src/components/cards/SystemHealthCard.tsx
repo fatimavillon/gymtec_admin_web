@@ -1,18 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getHealth } from "@/services/adminApi";
-import type { HealthStatus } from "@/types/admin";
 import { Server, CheckCircle, XCircle } from "lucide-react";
+import { checkHealth } from "@/services/adminApi";
 import { API_FALLBACK_URL } from "@/lib/constants";
 
 export function SystemHealthCard() {
-    const [health, setHealth] = useState<HealthStatus | null>(null);
-    const [error, setError] = useState(false);
+    const [ok,      setOk]      = useState<boolean | null>(null);
+    const [version, setVersion] = useState<string>("");
 
     useEffect(() => {
-        getHealth()
-            .then(setHealth)
-            .catch(() => setError(true));
+        checkHealth().then((r) => {
+            setOk(r.source === "live");
+            setVersion(r.data.version ?? "");
+        });
     }, []);
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? API_FALLBACK_URL;
@@ -26,33 +26,31 @@ export function SystemHealthCard() {
                 <p className="text-sm font-semibold text-slate-200">Salud del Sistema</p>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
                 <div className="flex items-center justify-between py-2 border-b border-slate-800">
                     <span className="text-xs text-slate-400">Backend FastAPI</span>
-                    <div className="flex items-center gap-1.5">
-                        {error ? (
-                            <>
-                                <XCircle className="w-3.5 h-3.5 text-red-400" />
-                                <span className="text-xs text-red-400">No disponible</span>
-                            </>
-                        ) : health ? (
-                            <>
-                                <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-                                <span className="text-xs text-emerald-400">Operativo</span>
-                            </>
-                        ) : (
-                            <span className="text-xs text-slate-500">Verificando...</span>
-                        )}
-                    </div>
+                    {ok === null ? (
+                        <span className="text-xs text-slate-500">Verificando...</span>
+                    ) : ok ? (
+                        <div className="flex items-center gap-1.5">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-xs text-emerald-400">Operativo</span>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5">
+                            <XCircle className="w-3.5 h-3.5 text-red-400" />
+                            <span className="text-xs text-red-400">No disponible</span>
+                        </div>
+                    )}
                 </div>
                 <div className="flex items-center justify-between py-1">
                     <span className="text-xs text-slate-400">URL</span>
                     <span className="text-xs text-slate-300 font-mono">{apiUrl}</span>
                 </div>
-                {health?.version && (
+                {version && (
                     <div className="flex items-center justify-between py-1">
                         <span className="text-xs text-slate-400">Versión</span>
-                        <span className="text-xs text-slate-300">{health.version}</span>
+                        <span className="text-xs text-slate-300">{version}</span>
                     </div>
                 )}
             </div>
