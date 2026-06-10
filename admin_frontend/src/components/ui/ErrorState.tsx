@@ -2,10 +2,7 @@
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-interface ErrorStateProps {
-    message?: string;
-    onRetry?: () => void;
-}
+interface ErrorStateProps { message?: string; onRetry?: () => void }
 
 export function ErrorState({
                                message = "No se pudo conectar con el backend admin. Verifica que FastAPI esté corriendo en http://localhost:8001",
@@ -13,14 +10,20 @@ export function ErrorState({
                            }: ErrorStateProps) {
     return (
         <div className="flex flex-col items-center justify-center py-16 gap-4 text-center px-4">
-            <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center">
-                <AlertCircle className="w-6 h-6 text-red-400" />
+            <div
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "#FEF2F2", border: "1px solid #FECACA" }}
+            >
+                <AlertCircle className="w-6 h-6" style={{ color: "#DC2626" }} />
             </div>
             <div className="space-y-1">
-                <p className="text-sm font-semibold text-slate-200">Error de conexión</p>
-                <p className="text-xs text-slate-400 max-w-md">{message}</p>
+                <p className="text-sm font-semibold" style={{ color: "#111827" }}>Error de conexión</p>
+                <p className="text-xs max-w-md" style={{ color: "#6B7280" }}>{message}</p>
             </div>
-            <div className="bg-slate-900/80 rounded-lg border border-slate-700 px-4 py-2.5 font-mono text-xs text-slate-300">
+            <div
+                className="rounded-lg px-4 py-2.5 font-mono text-xs"
+                style={{ background: "#F9FAFB", border: "1px solid #E5E7EB", color: "#374151" }}
+            >
                 uvicorn app.api.main:app --reload --port 8001
             </div>
             {onRetry && (

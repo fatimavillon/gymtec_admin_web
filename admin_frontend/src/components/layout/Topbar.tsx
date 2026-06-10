@@ -25,33 +25,42 @@ export function Topbar() {
         ping();
         setDate(
             new Date().toLocaleDateString("es-PE", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
+                weekday: "long", year: "numeric", month: "long", day: "numeric",
             })
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <header className="h-14 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-20">
-            <p className="text-xs text-slate-500 capitalize hidden sm:block">{date}</p>
+        <header
+            className="h-14 flex items-center justify-between px-6 sticky top-0 z-20"
+            style={{
+                background: "#ffffff",
+                borderBottom: "1px solid #E5E7EB",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+            }}
+        >
+            <p className="text-xs capitalize hidden sm:block" style={{ color: "#9CA3AF" }}>{date}</p>
 
             <div className="flex items-center gap-3 ml-auto">
-                {/* Backend status badge */}
                 {connected === null ? (
-                    <span className="text-xs text-slate-500">Verificando conexión...</span>
+                    <span className="text-xs" style={{ color: "#9CA3AF" }}>Verificando conexión...</span>
                 ) : connected ? (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <Wifi className="w-3 h-3 text-emerald-400" />
-                        <span className="text-[11px] font-medium text-emerald-400">Backend conectado</span>
+                    <div
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+                        style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#55CC22" }} />
+                        <Wifi className="w-3 h-3" style={{ color: "#16a34a" }} />
+                        <span className="text-[11px] font-medium" style={{ color: "#16a34a" }}>Backend conectado</span>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-                        <WifiOff className="w-3 h-3 text-amber-400" />
-                        <span className="text-[11px] font-medium text-amber-400">
+                    <div
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+                        style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
+                    >
+                        <WifiOff className="w-3 h-3" style={{ color: "#d97706" }} />
+                        <span className="text-[11px] font-medium" style={{ color: "#d97706" }}>
               {source === "mock" ? "Modo demo" : "Sin conexión"}
             </span>
                     </div>
@@ -63,6 +72,7 @@ export function Topbar() {
                     onClick={ping}
                     disabled={checking}
                     title="Actualizar estado"
+                    className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 >
                     <RefreshCw className={`w-3 h-3 ${checking ? "animate-spin" : ""}`} />
                     <span className="hidden sm:inline">Actualizar</span>

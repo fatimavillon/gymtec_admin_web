@@ -9,10 +9,12 @@ interface CardProps {
 export function Card({ children, className }: CardProps) {
     return (
         <div
-            className={clsx(
-                "rounded-xl border border-slate-700/60 bg-slate-800/50 backdrop-blur-sm p-5",
-                className
-            )}
+            className={clsx("rounded-xl p-5", className)}
+            style={{
+                background: "#ffffff",
+                border: "1px solid #E5E7EB",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+            }}
         >
             {children}
         </div>
@@ -42,10 +44,8 @@ export function CardTitle({
 }) {
     return (
         <h3
-            className={clsx(
-                "text-sm font-semibold uppercase tracking-wider text-slate-300",
-                className
-            )}
+            className={clsx("text-sm font-semibold uppercase tracking-wider", className)}
+            style={{ color: "#6B7280" }}
         >
             {children}
         </h3>

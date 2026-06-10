@@ -3,28 +3,32 @@
 @tailwind utilities;
 
 :root {
-    /* GYMTEC Design System */
-    --utec-blue:   #0040A0;
-    --tech-cyan:   #00CCFF;
-    --green:       #55CC22;
-    --gold:        #DDAA66;
-    --coral:       #FF4433;
-    --grey:        #C0C0C0;
-    --dark:        #111111;
+    --utec-blue:  #0040A0;
+    --tech-cyan:  #00CCFF;
+    --green:      #55CC22;
+    --gold:       #DDAA66;
+    --coral:      #FF4433;
+    --grey:       #C0C0C0;
+    --dark:       #111111;
+    --bg-main:    #F6F8FB;
+    --bg-card:    #FFFFFF;
+    --border:     #E5E7EB;
+    --text-main:  #111827;
+    --text-muted: #6B7280;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body {
-    background-color: #0b0f1a;
-    color: #f1f5f9;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar       { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #0f172a; }
-::-webkit-scrollbar-thumb { background: #1e3a6e; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #0040A0; }

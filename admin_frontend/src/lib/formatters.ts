@@ -8,13 +8,9 @@ export function formatPercent(value: number): string {
 export function formatDate(value: string): string {
     try {
         return new Date(value + "T00:00:00").toLocaleDateString("es-PE", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
+            year: "numeric", month: "long", day: "numeric",
         });
-    } catch {
-        return value;
-    }
+    } catch { return value; }
 }
 
 export function formatNumber(value: number): string {
@@ -22,23 +18,19 @@ export function formatNumber(value: number): string {
 }
 
 export function formatScore(value: number): string {
-    // value 0-1 → show as percentage
     return value <= 1 ? `${Math.round(value * 100)}%` : `${value}%`;
 }
 
 export function getOccupancyLevelLabel(level: OccupancyLevel): string {
     const labels: Record<OccupancyLevel, string> = {
-        Bajo:    "Aforo Bajo",
-        Medio:   "Aforo Medio",
-        Alto:    "Aforo Alto",
-        Crítico: "Aforo Crítico",
-        Cerrado: "Cerrado",
+        Bajo: "Aforo Bajo", Medio: "Aforo Medio", Alto: "Aforo Alto",
+        Crítico: "Aforo Crítico", Cerrado: "Cerrado",
     };
     return labels[level] ?? level;
 }
 
 export function getOccupancyLevelColor(level: OccupancyLevel | string): string {
-    return OCCUPANCY_HEX[level] ?? "#6B7280";
+    return OCCUPANCY_HEX[level] ?? "#9CA3AF";
 }
 
 export function getOccupancyLevelBadge(level: OccupancyLevel | string): string {
