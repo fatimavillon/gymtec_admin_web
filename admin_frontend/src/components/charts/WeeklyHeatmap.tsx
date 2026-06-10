@@ -3,20 +3,13 @@ import type { WeeklyHeatmapResponse, OccupancyLevel } from "@/types/admin";
 
 interface Props { data: WeeklyHeatmapResponse }
 
-const CELL_COLOR: Record<OccupancyLevel, string> = {
-    Bajo:    "bg-emerald-500/70 border-emerald-500/20",
-    Medio:   "bg-amber-500/60  border-amber-500/20",
-    Alto:    "bg-red-500/70    border-red-500/20",
-    Crítico: "bg-red-700/80    border-red-700/20",
-    Cerrado: "bg-slate-700/40  border-slate-700/20",
-};
-
-const CELL_TEXT: Record<OccupancyLevel, string> = {
-    Bajo:    "text-emerald-100",
-    Medio:   "text-amber-100",
-    Alto:    "text-red-100",
-    Crítico: "text-red-50",
-    Cerrado: "text-slate-500",
+// GYMTEC palette — semi-transparent fills over dark background
+const CELL_STYLE: Record<OccupancyLevel, { bg: string; text: string; border: string }> = {
+    Bajo:    { bg: "rgba(85,204,34,0.55)",   text: "#e8ffe0", border: "rgba(85,204,34,0.3)"   },
+    Medio:   { bg: "rgba(221,170,102,0.60)", text: "#fff3d6", border: "rgba(221,170,102,0.3)" },
+    Alto:    { bg: "rgba(255,68,51,0.65)",   text: "#ffe8e6", border: "rgba(255,68,51,0.35)"  },
+    Crítico: { bg: "rgba(180,20,10,0.75)",   text: "#ffd0cc", border: "rgba(180,20,10,0.4)"   },
+    Cerrado: { bg: "rgba(30,35,55,0.60)",    text: "#444455", border: "rgba(50,55,80,0.3)"    },
 };
 
 const LEVELS: OccupancyLevel[] = ["Bajo", "Medio", "Alto", "Crítico", "Cerrado"];
@@ -34,9 +27,7 @@ export function WeeklyHeatmap({ data }: Props) {
                 <tr>
                     <th className="text-[10px] text-slate-500 font-medium text-left pr-2 pb-1 w-8">h</th>
                     {days.map((d) => (
-                        <th key={d} className="text-[11px] text-slate-400 font-semibold text-center pb-1">
-                            {d}
-                        </th>
+                        <th key={d} className="text-[11px] text-slate-400 font-semibold text-center pb-1">{d}</th>
                     ))}
                 </tr>
                 </thead>
@@ -47,17 +38,16 @@ export function WeeklyHeatmap({ data }: Props) {
                         {days.map((d) => {
                             const cell  = getCell(d, h);
                             const level = (cell?.level ?? "Cerrado") as OccupancyLevel;
+                            const s     = CELL_STYLE[level];
                             return (
                                 <td key={`${d}-${h}`} className="py-0.5 text-center">
                                     <div
-                                        title={`${d} ${h}h — ${level} (${cell?.occupancy ?? 0}%)`}
-                                        className={clsx(
-                                            "mx-auto w-full h-7 rounded border flex items-center justify-center cursor-default hover:opacity-80 transition-opacity",
-                                            CELL_COLOR[level]
-                                        )}
+                                        title={`${d} ${h}h — ${level}${cell ? ` (${cell.occupancy}%)` : ""}`}
+                                        className="mx-auto w-full h-7 rounded flex items-center justify-center cursor-default hover:opacity-80 transition-opacity"
+                                        style={{ background: s.bg, border: `1px solid ${s.border}` }}
                                     >
-                                        {cell && (
-                                            <span className={clsx("text-[10px] font-medium", CELL_TEXT[level])}>
+                                        {cell && cell.level !== "Cerrado" && (
+                                            <span className="text-[10px] font-semibold" style={{ color: s.text }}>
                           {cell.occupancy}
                         </span>
                                         )}
@@ -71,14 +61,20 @@ export function WeeklyHeatmap({ data }: Props) {
             </table>
 
             {/* Legend */}
-            <div className="flex flex-wrap items-center gap-4 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex flex-wrap items-center gap-4 mt-4 pt-3 border-t border-slate-800/80">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Nivel:</span>
-                {LEVELS.map((level) => (
-                    <div key={level} className="flex items-center gap-1.5">
-                        <div className={clsx("w-3 h-3 rounded border", CELL_COLOR[level])} />
-                        <span className="text-[11px] text-slate-400">{level}</span>
-                    </div>
-                ))}
+                {LEVELS.map((level) => {
+                    const s = CELL_STYLE[level];
+                    return (
+                        <div key={level} className="flex items-center gap-1.5">
+                            <div
+                                className="w-3 h-3 rounded"
+                                style={{ background: s.bg, border: `1px solid ${s.border}` }}
+                            />
+                            <span className="text-[11px] text-slate-400">{level}</span>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

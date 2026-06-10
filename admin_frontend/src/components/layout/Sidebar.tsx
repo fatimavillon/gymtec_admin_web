@@ -3,13 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import {
-    LayoutDashboard,
-    Users,
-    Lightbulb,
-    BrainCircuit,
-    Database,
-    Settings,
-    Activity,
+    LayoutDashboard, Users, Lightbulb, BrainCircuit,
+    Database, Settings, Activity,
 } from "lucide-react";
 
 const NAV = [
@@ -25,15 +20,18 @@ export function Sidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="hidden md:flex flex-col w-60 min-h-screen bg-slate-900 border-r border-slate-800 fixed left-0 top-0 bottom-0 z-30">
+        <aside className="hidden md:flex flex-col w-60 min-h-screen border-r border-slate-800/80 fixed left-0 top-0 bottom-0 z-30"
+               style={{ background: "#0d1625" }}>
+
             {/* Logo */}
-            <div className="flex items-center gap-3 px-5 py-[18px] border-b border-slate-800">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center gap-3 px-5 py-[18px] border-b border-slate-800/80">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                     style={{ background: "#0040A0" }}>
                     <Activity className="w-4 h-4 text-white" />
                 </div>
                 <div>
                     <p className="text-sm font-bold text-white leading-none">GYMTEC</p>
-                    <p className="text-[10px] text-slate-400 tracking-widest uppercase mt-0.5">Admin Web</p>
+                    <p className="text-[10px] tracking-widest uppercase mt-0.5" style={{ color: "#00CCFF" }}>Admin Web</p>
                 </div>
             </div>
 
@@ -43,9 +41,7 @@ export function Sidebar() {
                     Panel
                 </p>
                 {NAV.map(({ href, label, Icon }) => {
-                    const active =
-                        pathname === href ||
-                        (href !== "/" && pathname.startsWith(href));
+                    const active = pathname === href || (href !== "/" && pathname.startsWith(href));
                     return (
                         <Link
                             key={href}
@@ -53,11 +49,18 @@ export function Sidebar() {
                             className={clsx(
                                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150",
                                 active
-                                    ? "bg-blue-600/15 text-blue-400 border border-blue-600/20"
-                                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+                                    ? "text-white border"
+                                    : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                             )}
+                            style={active ? {
+                                background: "rgba(0, 64, 160, 0.25)",
+                                borderColor: "rgba(0, 64, 160, 0.5)",
+                            } : undefined}
                         >
-                            <Icon className="w-4 h-4 flex-shrink-0" />
+                            <Icon
+                                className="w-4 h-4 flex-shrink-0"
+                                style={active ? { color: "#00CCFF" } : undefined}
+                            />
                             {label}
                         </Link>
                     );
@@ -65,7 +68,7 @@ export function Sidebar() {
             </nav>
 
             {/* Footer */}
-            <div className="px-5 py-4 border-t border-slate-800">
+            <div className="px-5 py-4 border-t border-slate-800/80">
                 <p className="text-[10px] text-slate-600">UTEC · GYMTEC v0.1.0</p>
             </div>
         </aside>

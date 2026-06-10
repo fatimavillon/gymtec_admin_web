@@ -2,33 +2,27 @@ import {
     getDashboardSummary,
     getHourlyOccupancy,
     getWeeklyHeatmap,
-    getTopRecommendations,
 } from "@/services/adminApi";
-import { MetricCard }           from "@/components/ui/MetricCard";
-import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
-import { OccupancyBadge, SourceBadge } from "@/components/ui/Badge";
-import { HourlyOccupancyChart } from "@/components/charts/HourlyOccupancyChart";
-import { WeeklyHeatmap }        from "@/components/charts/WeeklyHeatmap";
-import { RecommendationList }   from "@/components/cards/RecommendationList";
-import { EmptyState }           from "@/components/ui/EmptyState";
-import {
-    Users, Activity, Clock, TrendingUp, BarChart2, Zap,
-} from "lucide-react";
+import { MetricCard }                    from "@/components/ui/MetricCard";
+import { Card, CardHeader, CardTitle }   from "@/components/ui/Card";
+import { OccupancyBadge, SourceBadge }   from "@/components/ui/Badge";
+import { HourlyOccupancyChart }          from "@/components/charts/HourlyOccupancyChart";
+import { WeeklyHeatmap }                 from "@/components/charts/WeeklyHeatmap";
+import { EmptyState }                    from "@/components/ui/EmptyState";
+import { Users, Activity, Clock, TrendingUp, BarChart2, Zap } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-    const [summaryResult, hourlyResult, heatmapResult, recoResult] = await Promise.all([
+    const [summaryResult, hourlyResult, heatmapResult] = await Promise.all([
         getDashboardSummary(),
         getHourlyOccupancy(),
         getWeeklyHeatmap(),
-        getTopRecommendations(),
     ]);
 
-    const summary       = summaryResult.data;
-    const hourly        = hourlyResult.data;
-    const heatmap       = heatmapResult.data;
-    const recommendations = recoResult.data;
+    const summary = summaryResult.data;
+    const hourly  = hourlyResult.data;
+    const heatmap = heatmapResult.data;
 
     const accentMap: Record<string, "green" | "amber" | "red"> = {
         Bajo: "green", Medio: "amber", Alto: "red", Crítico: "red",
@@ -97,44 +91,30 @@ export default async function DashboardPage() {
                 />
             </div>
 
-            {/* Chart + Recommendations */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Ocupación por hora</CardTitle>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-500">{hourly.date}</span>
-                            <SourceBadge source={hourlyResult.source} />
-                        </div>
-                    </CardHeader>
-                    {hourly.items.length > 0 ? (
-                        <HourlyOccupancyChart items={hourly.items} />
-                    ) : (
-                        <EmptyState label="Sin datos de ocupación horaria" />
-                    )}
-                </Card>
+            {/* Hourly chart — full width now that recommendations removed */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Ocupación por hora</CardTitle>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500">{hourly.date} · 09:00 – 18:00</span>
+                        <SourceBadge source={hourlyResult.source} />
+                    </div>
+                </CardHeader>
+                {hourly.items.length > 0 ? (
+                    <HourlyOccupancyChart items={hourly.items} />
+                ) : (
+                    <EmptyState label="Sin datos de ocupación horaria" />
+                )}
+            </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top recomendaciones</CardTitle>
-                        <SourceBadge source={recoResult.source} />
-                    </CardHeader>
-                    {recommendations.items.length > 0 ? (
-                        <RecommendationList items={recommendations.items} />
-                    ) : (
-                        <EmptyState label="Sin recomendaciones disponibles" />
-                    )}
-                </Card>
-            </div>
-
-            {/* Heatmap */}
+            {/* Weekly Heatmap */}
             <Card>
                 <CardHeader>
                     <CardTitle>Predicción semanal — Heatmap de aforo</CardTitle>
                     <SourceBadge source={heatmapResult.source} />
                 </CardHeader>
                 <p className="text-xs text-slate-500 mb-4">
-                    Basado en patrones históricos, carga académica y disponibilidad estimada
+                    Basado en patrones históricos y carga académica · Sábado cierra a las 13:00
                 </p>
                 <WeeklyHeatmap data={heatmap} />
             </Card>
